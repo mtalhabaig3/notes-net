@@ -5,6 +5,7 @@ const { body, validationResult } = require("express-validator");
 const { response } = require("express");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+var fetchuser = require("../middleware/fetchuser");
 
 const JWT_SECRET = "Assalam u Alaikum";
 
@@ -37,7 +38,7 @@ router.post(
         password: secPass,
       });
       const data = {
-        id: user.id,
+        user: { id: user.id },
       };
       const authtoken = jwt.sign(data, JWT_SECRET);
       res.json(authtoken);
@@ -63,19 +64,20 @@ router.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
-        return res
-          .status(400)
-          .json({ error: "Please try to login with correct credentials" });
+        return res.status(400).json({
+          error: "No User, Please try to login with correct credentials",
+        });
       }
 
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
-        return res
-          .status(400)
-          .json({ error: "Please try to login with correct credentials" });
+        return res.status(400).json({
+          error: "Wrong Password, Please try to login with correct credentials",
+        });
       }
+
       const data = {
-        id: user.id,
+        user: { id: user.id },
       };
       const authtoken = jwt.sign(data, JWT_SECRET);
       res.json(authtoken);
@@ -84,5 +86,15 @@ router.post(
     }
   }
 );
+
+router.post("/getuser", fetchuser, async (req, res) => {
+  try {
+    let userId = req.user.id;
+    const user = await User.findById(userId).select("-password");
+    res.send(user);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
 
 module.exports = router;
