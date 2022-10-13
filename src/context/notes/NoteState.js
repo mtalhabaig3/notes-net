@@ -29,6 +29,7 @@ const NoteState = (props) => {
   };
 
   const addNote = async (title, description) => {
+    console.log(title, description);
     const response = await fetch(`${host}/api/notes/addnote`, {
       method: "POST",
       headers: {
@@ -36,9 +37,10 @@ const NoteState = (props) => {
         "auth-token":
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjM0NTUyNTNmYzJjNzQxZTNmZTVhMTc2In0sImlhdCI6MTY2NTQ4NzQ2NH0.PFviXaGm4xYMe48CkO21VQSgEaaMPtXlINCOmotZ9t4",
       },
-      body: JSON.stringify(title, description),
+      body: JSON.stringify({ title, description }),
     });
     const json = response.json();
+    console.log(json);
     const note = {
       _id: "6346c80b358adbcef12482f675",
       user: "63455253fc2c741e3fe5a176",
@@ -70,23 +72,30 @@ const NoteState = (props) => {
   };
 
   const editNote = async (id, title, description) => {
+    console.log(id, title, description);
+    console.log("here at edit note");
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "auth-token":
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjM0NTUyNTNmYzJjNzQxZTNmZTVhMTc2In0sImlhdCI6MTY2NTQ4NzQ2NH0.PFviXaGm4xYMe48CkO21VQSgEaaMPtXlINCOmotZ9t4",
       },
-      body: JSON.stringify(id, title, description),
+      body: JSON.stringify({ id, title, description }),
     });
     const json = response.json();
-    for (let index = 0; index < notes.length; index++) {
-      const element = notes[index];
+    console.log(json);
+
+    let newNotes = JSON.parse(JSON.stringify(notes));
+    for (let index = 0; index < newNotes.length; index++) {
+      const element = newNotes[index];
       if (element._id === id) {
-        element.title = title;
-        element.description = description;
+        newNotes[index].title = title;
+        newNotes[index].description = description;
+        break;
       }
     }
+    setNotes(newNotes);
   };
   return (
     <noteContext.Provider
