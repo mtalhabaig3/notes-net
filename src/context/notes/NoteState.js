@@ -79,7 +79,6 @@ const NoteState = (props) => {
   const [notes, setNotes] = useState(notesInitial);
 
   const addNote = (title, description) => {
-    console.log(title, description);
     const note = {
       _id: "6346c80b358adbcef12482f675",
       user: "63455253fc2c741e3fe5a176",
@@ -92,7 +91,13 @@ const NoteState = (props) => {
     setNotes(notes.concat(note));
   };
 
-  const deleteNote = () => {};
+  const deleteNote = (id) => {
+    console.log("Deleting Note id:" + id);
+    const newNotes = notes.filter((note) => {
+      return note._id !== id;
+    });
+    setNotes(newNotes);
+  };
 
   const editNote = () => {};
   return (

@@ -7,7 +7,6 @@ const AddNote = () => {
   const [note, setNote] = useState({ title: "", description: "" });
   const handleAdd = (e) => {
     e.preventDefault();
-    console.log(note.title, note.description);
     addNote(note.title, note.description);
   };
 
@@ -54,7 +53,7 @@ const AddNote = () => {
           </label>
         </div>
         <button type="submit" className="btn btn-primary" onClick={handleAdd}>
-          Submit
+          Add Note
         </button>
       </form>
     </div>
