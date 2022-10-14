@@ -8,6 +8,7 @@ var bcrypt = require("bcryptjs");
 var fetchuser = require("../middleware/fetchuser");
 
 const JWT_SECRET = "Assalam u Alaikum";
+let success = false;
 
 router.post(
   "/createUser",
@@ -80,7 +81,9 @@ router.post(
         user: { id: user.id },
       };
       const authtoken = jwt.sign(data, JWT_SECRET);
-      res.json(authtoken);
+      success = true;
+
+      res.json({ success, authtoken });
     } catch (error) {
       console.log(error.message);
     }
