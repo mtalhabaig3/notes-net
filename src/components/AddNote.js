@@ -8,6 +8,7 @@ const AddNote = () => {
   const handleAdd = (e) => {
     e.preventDefault();
     addNote(note.title, note.description);
+    setNote({ title: "", description: "" });
   };
 
   const onChange = (e) => {
@@ -28,6 +29,8 @@ const AddNote = () => {
             name="title"
             aria-describedby="emailHelp"
             onChange={onChange}
+            minLength={5}
+            value={note.title}
           />
         </div>
         <div className="mb-3 my-3">
@@ -40,9 +43,16 @@ const AddNote = () => {
             id="description"
             name="description"
             onChange={onChange}
+            minLength={5}
+            value={note.description}
           />
         </div>
-        <button type="submit" className="btn btn-primary" onClick={handleAdd}>
+        <button
+          disabled={note.title.length < 5 || note.description.length < 5}
+          type="submit"
+          className="btn btn-primary"
+          onClick={handleAdd}
+        >
           Add Note
         </button>
       </form>

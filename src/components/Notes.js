@@ -77,6 +77,7 @@ const Notes = () => {
                     aria-describedby="emailHelp"
                     onChange={onChange}
                     value={note.title}
+                    minLength={5}
                   />
                 </div>
                 <div className="mb-3 my-3">
@@ -90,6 +91,7 @@ const Notes = () => {
                     name="description"
                     onChange={onChange}
                     value={note.description}
+                    minLength={5}
                   />
                 </div>
                 <button
@@ -114,6 +116,7 @@ const Notes = () => {
                 type="button"
                 className="btn btn-primary"
                 onClick={handleUpdate}
+                disabled={note.title.length < 5 || note.description.length < 5}
               >
                 Update Note
               </button>
@@ -123,6 +126,9 @@ const Notes = () => {
       </div>
       <div className="row my-3">
         <h2>Your Notes</h2>
+        <div className="container mx-2">
+          {notes.length === 0 && "No notes to display"}
+        </div>
         {notes.map((note) => {
           return (
             <NoteItem key={note._id} updateNote={updateNote} note={note} />
