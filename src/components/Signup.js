@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SignUp = () => {
+const SignUp = (props) => {
   let history = useNavigate();
   const [credentials, setCredentials] = useState({
     email: "",
@@ -31,13 +31,15 @@ const SignUp = () => {
     if (json.success) {
       console.log("Going to navigate");
       localStorage.setItem("token", json.authtoken);
+      props.showAlert("Account Created Successfully", "success");
       history("/");
     } else {
-      alert("Invalid credentials");
+      props.showAlert("Invalid Credentials", "danger");
     }
   };
   return (
     <form onSubmit={handleSubmit}>
+      <h2 className="mt-2">Create an account to use Smart Notes!</h2>
       <div className="mb-3 my-3">
         <label htmlFor="exampleInputEmail1" className="form-label">
           Name
